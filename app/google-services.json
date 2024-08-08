@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "845610416327",
+    "project_id": "compassoo-project",
+    "storage_bucket": "compassoo-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:845610416327:android:7e7a4c4c0ad0022dc566e2",
+        "android_client_info": {
+          "package_name": "com.molog.compassoo_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE8DcWf7Si-OPH9glBIO6sFXaqJ1l4emk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
