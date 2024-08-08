@@ -72,8 +72,6 @@ import com.molog.compassoo_project.ui.theme.futurafamily
 fun FilterScreenPreview(){
     FilterScreen(mainAppViewModel = viewModel<MainAppViewModel>(), navController = rememberNavController())
 }
-//for dummy commit
-
 @Composable
 fun FilterScreen(mainAppViewModel: MainAppViewModel, navController: NavController){
     val colorDark = (mainAppViewModel.currentNavigation.value as Screen.Navigation.EducationModuleNavigation).nColor2
