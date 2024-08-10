@@ -103,7 +103,7 @@ dependencies {
     //Pager
     implementation ("com.google.accompanist:accompanist-pager:0.28.0")
     //FlowLayout
-    implementation ("com.google.accompanist:accompanist-  flowlayout:0.30.1")
+    runtimeOnly("com.google.accompanist:accompanist-flowlayout:0.35.1-alpha")
 
     //Room Library
     val room_version = "2.6.1"

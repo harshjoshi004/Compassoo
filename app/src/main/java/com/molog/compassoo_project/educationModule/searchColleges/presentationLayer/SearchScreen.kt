@@ -232,6 +232,7 @@ fun SearchCollegesScreen(mainViewModel: MainAppViewModel, navController: NavCont
                                 .padding(8.dp)
                                 .pointerInput(Unit) {
                                     detectTapGestures { _ ->
+                                        navController.navigate("filter")
                                     }
                                 },
                             horizontalAlignment = Alignment.CenterHorizontally,

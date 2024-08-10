@@ -8,6 +8,7 @@ import com.molog.compassoo_project.MainAppViewModel
 import com.molog.compassoo_project.Screen
 import com.molog.compassoo_project.educationModule.createEducationAccount.presentationLayer.CreateAccountFormLayout
 import com.molog.compassoo_project.educationModule.createEducationAccount.presentationLayer.CustomiseYourSearchFormLayout
+import com.molog.compassoo_project.educationModule.searchColleges.presentationLayer.FilterScreen
 import com.molog.compassoo_project.educationModule.searchColleges.presentationLayer.SearchCollegesScreen
 
 fun NavGraphBuilder.educationGraph(mainAppViewModel: MainAppViewModel, navController: NavHostController){
@@ -27,6 +28,9 @@ fun NavGraphBuilder.educationGraph(mainAppViewModel: MainAppViewModel, navContro
             val filter2 = backStackEntry.arguments?.getString("filter2") ?: ""
             val filter3 = backStackEntry.arguments?.getString("filter3") ?: ""
             SearchCollegesScreen(mainViewModel = mainAppViewModel, navController = navController, filter1 = filter1, filter2 = filter2, filter3 = filter3)
+        }
+        composable("filter"){
+            FilterScreen(mainAppViewModel = mainAppViewModel, navController = navController)
         }
     }
 }

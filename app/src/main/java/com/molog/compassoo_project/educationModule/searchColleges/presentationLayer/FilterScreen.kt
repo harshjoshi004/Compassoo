@@ -37,6 +37,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposableTarget
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -177,7 +178,6 @@ fun FilterScreen(mainAppViewModel: MainAppViewModel, navController: NavControlle
                 .fillMaxWidth()) {
 
                 //Reset Changes Button
-
                 Button(
                     modifier = Modifier
                         .padding(8.dp)
@@ -219,7 +219,7 @@ fun FilterScreen(mainAppViewModel: MainAppViewModel, navController: NavControlle
                         containerColor = Color.Transparent,
                         contentColor = Color.White
                     ),
-                    onClick = { /*TODO*/ }
+                    onClick = { navController.navigateUp() }
                 ) {
                     Text(
                         text = "Apply",
@@ -353,22 +353,17 @@ fun CourseFilterComposable(color: Color) {
         "MSc in Management",
         "(BCom) Bachelor of Commerce",
         "(BBA) Bachelor of Business Administration",
-        "(BCom) Bachelor of Commerce",
         "(MBA) Master of Business Administration",
         "(MSCM) Master of Supply Chain Management",
         "(MMAI) Master of Management in Artificial Intelligence",
         "(BAcc) Bachelor of Accounting",
-        "(BBA) Bachelor of Business Administration",
-        "(MBA) Master of Business Administration",
-        "MSc in Management",
-        "(BCom) Bachelor of Commerce",
-        "(MSCM) Master of Supply Chain Management",
-        "(MMAI) Master of Management in Artificial Intelligence"
     )
 
     val selectedCourseState = remember {
         mutableStateOf(courseList[0])
     }
+
+    var updatedCourseList = remember{ mutableStateOf(courseList.filter { it.contains("", ignoreCase = true) }) }
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         //The Search Bar
@@ -383,14 +378,21 @@ fun CourseFilterComposable(color: Color) {
 
             ){
                 Row(modifier = Modifier, verticalAlignment = Alignment.CenterVertically) {
-                    BasicTextField(value = searchStringState.value, onValueChange = {searchStringState.value = it}, singleLine = true,
+                    BasicTextField(value = searchStringState.value, onValueChange = { value->
+                            searchStringState.value = value
+                            updatedCourseList.value = courseList.filter { it.contains(searchStringState.value, ignoreCase = true) }
+                        },
+                        singleLine = true,
                         modifier = Modifier.weight(1f), textStyle = TextStyle(
                             fontSize = 14.sp,
                             fontFamily = futurafamily,
                             color = TextColor1,
                             textAlign = TextAlign.End)
                     )
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                            updatedCourseList.value = courseList.filter { it.contains(searchStringState.value, ignoreCase = true) }
+                        }
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Search, modifier = Modifier.size(20.dp),
                             tint = TextColor1, contentDescription = null
@@ -400,17 +402,23 @@ fun CourseFilterComposable(color: Color) {
             }
         }
 
-        val updatedCourseList = courseList.filter { it.contains(searchStringState.value, ignoreCase = true) }
+
 
         //The rest of the list
-        updatedCourseList.forEachIndexed { ind, course->
+        updatedCourseList.value.forEach { course->
             item {
                 Column(modifier = Modifier.animateItemPlacement()) {
                     Text(text = course, fontFamily = futurafamily, fontSize = 14.sp,
-                        color = if(course == selectedCourseState.value) color else TextColor1, fontWeight = FontWeight.Light,
-                        modifier = Modifier.padding(horizontal = 16.dp))
+                        color = if(course == selectedCourseState.value) color else TextColor1,
+                        fontWeight = FontWeight.Light,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clickable {
+                                selectedCourseState.value = course
+                            }
+                    )
 
-                    if(ind != updatedCourseList.size - 1)
+                    if(course != updatedCourseList.value.last())
                         Box(modifier = Modifier
                             .padding(top = 8.dp, bottom = 8.dp)
                             .clip(RoundedCornerShape(50))
@@ -429,7 +437,7 @@ fun LocationFilterComposable(color: Color) {
     val searchLocationState = remember {
         mutableStateOf("")
     }
-    val locationList = mutableListOf(
+    val locationList = listOf(
         "Toronto",
         "Montreal",
         "Vancouver",
@@ -437,14 +445,6 @@ fun LocationFilterComposable(color: Color) {
         "Whistler",
         "Banff",
         "Ottawa",
-        "Montreal",
-        "Vancouver",
-        "Quebec City",
-        "Whistler",
-        "Banff",
-        "Ottawa",
-        "Quebec City",
-        "Banff",
         "Calgary",
         "Edmonton",
         "Winnipeg",
@@ -457,6 +457,7 @@ fun LocationFilterComposable(color: Color) {
         "Saskatoon",
         "St. John's"
     )
+
     val selectedLocationState = remember {mutableStateOf(locationList[0])}
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -472,7 +473,7 @@ fun LocationFilterComposable(color: Color) {
 
             ){
                 Row(modifier = Modifier, verticalAlignment = Alignment.CenterVertically) {
-                    BasicTextField(value = searchLocationState.value, onValueChange = {searchLocationState.value = it}, singleLine = true,
+                    BasicTextField(value = searchLocationState.value, onValueChange = { searchLocationState.value = it}, singleLine = true,
                         modifier = Modifier.weight(1f), textStyle = TextStyle(
                             fontSize = 14.sp,
                             fontFamily = futurafamily,
@@ -495,8 +496,12 @@ fun LocationFilterComposable(color: Color) {
         updatedLocationList.forEachIndexed { ind, location->
             item {
                 Column(modifier = Modifier.animateItemPlacement()) {
-                    Text(text = location, modifier = Modifier.padding(horizontal = 16.dp),
-                        fontFamily = futurafamily, fontSize = 14.sp, color = TextColor1, fontWeight = FontWeight.Light)
+                    Text(text = location,
+                        modifier = Modifier.padding(horizontal = 16.dp).clickable {
+                            selectedLocationState.value = location
+                        },
+                        fontFamily = futurafamily, fontSize = 14.sp,
+                        color = if(selectedLocationState.value == location) color else TextColor1, fontWeight = FontWeight.Light)
 
                     //Divider
                     if(ind != updatedLocationList.size - 1)
